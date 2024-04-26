@@ -1,38 +1,144 @@
+:root {
+  --text: #112D4E;
+  --base: #F9F7F7;
+  --main: #DBE2EF;
+  --highlight: #3F72AF;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+
 .App {
+  width: 50vw;
+  max-width: 1000px;
+  min-width: 400px;
+  margin: 0 auto;
+  font-family: 'Inter', sans-serif;
+}
+
+.quote-script-logo {
+  width: 40px;
+  margin: 5px;
+}
+
+.Main {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.Main h1 {
+  margin: 0;
+  text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.Main > p  {
+  margin: 5px 0 20px 0;
+  font-weight: 200;
+  font-size: 14px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.Hrquote {
+  height: 25px;
+  width: 100%;
+  font-weight: 700;
+  font-style: normal;
+  position: relative;
+}
+
+.Hrquote img {
+  height: 100%;
+  margin: 0 auto;
+  background-color: var(--base);
+  z-index: 1;
+}
+
+.Hrquote hr{
+  width: 100%;
+  background-color: var(--main); 
+  height: 1px; 
+  border: 0;
+  margin: 0 auto;
+  position: absolute;
+  top: 10px;
+  z-index: -1;
+}
+
+
+.Quote {
+  width: 70%;
+  text-align: center;
+  margin: 0 auto;
+}
+
+.Quote p:last-of-type {
+  font-style: italic;
+  font-weight: 100;
+}
+
+
+.Ctabuttons {
+  padding-top: 10px;
+}
+
+.Ctabuttons button:first-of-type {
+  width: 100px;
+  height: 30px;
+  background: var(--highlight);
+  border: 3px solid var(--highlight);
+  border-radius: 10px;
+  color: var(--base);
+  filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.25));
+  margin: 10px;
+  cursor: pointer;
+}
+
+.Ctabuttons button:last-of-type {
+  width: 100px;
+  height: 30px;
+  color: var(--highlight);
+  border: 3px solid var(--highlight);
+  border-radius: 10px;
+  cursor: pointer;
+  margin: 10px;
+  filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.25));
+}
+
+.Socials {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  padding-top: 10px;
 }
 
-.App-link {
-  color: #61dafb;
+.Socials img {
+  width: 20px;
+  height: 20px;
+  margin: 5px 7px;
+  cursor: pointer;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
+.RecentQuotes {
+  padding-top: 20px;
+  width: 80%;
+  margin: 0 auto;
+}
+
+.RecentQuotes h2 {
+  font-weight: 200;
+  font-size: 14px;
+}
+
+.RecentQuotes p {
+  font-weight: 200;
+  font-size: 12px;
+  width: 100%;
+  padding: 10px 0;
+  border-bottom: 2px dashed var(--main);
+  margin: 0;
+}
+
+@media screen and (max-width: 499px) {
+  .App {
+    width: 95%;
   }
 }
