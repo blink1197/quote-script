@@ -1,1 +1,1 @@
-# Source code for Soul Script App
+# Source code for Quote Script App
