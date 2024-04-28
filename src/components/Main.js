@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import '../App.css';
 
 function Hrquote(props) {
@@ -9,43 +10,69 @@ function Hrquote(props) {
     );
 }
 
-function Quote() {
+function Quote(props) {
   return (
       <div className='Quote'>
-          <p>
-          If there is such a thing as a good marriage, it is because it resembles friendship rather than love.
-          </p>
-          <p>
-          -Michael De Montaigne
-          </p>
+          <p>{props.quote.content}</p>
+          <p>{props.quote.author}</p>
       </div>
   );
 }
 
-
-function Ctabuttons() {
+function Ctabuttons(props) {
   return (
       <div className='Ctabuttons'>
-          <button>New Quote</button>
+          <button onClick={props.selectNewQuote}>New Quote</button>
           <button>Copy Quote</button>
       </div>
   );
 }
 
 
-
 export default function Main() {
+  const [currentQuote, setCurrentQuote] = useState({});
+  const [quotes, setQuotes] = useState([]);
+  const [recent, setRecentQuotes] = useState([]);
 
-    return (
-      <div className="Main">
-        <h1>Quote Script</h1>
-        <p>Endless inspiration, Discover your Quote of the Day!</p>
-        <Hrquote type="start"/>
-        <Quote />
-        <Hrquote type="end"/>
-        <Ctabuttons />
-      </div>
-    );
+  const selectNewQuote = () => {
+    if (quotes.length === 0) return; // If quotes array is empty, do nothing
+    const randomIndex = Math.floor(Math.random() * quotes.length);
+    const newQuote = quotes[randomIndex];
+    setCurrentQuote(newQuote);
+    setQuotes(prevQuotes => prevQuotes.filter((item, index) => index !== randomIndex));
+    setRecentQuotes(prevQuotes => [...prevQuotes, newQuote]);
+  }
 
+  useEffect(() => {
+    const fetchQuotes = async () => {
+      const apiUrl = 'https://api.quotable.io/quotes/random?limit=50';
+      try {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+        if (data && data.length > 0) {
+          if (!currentQuote) setCurrentQuote(data[0]);
+          setQuotes(data.slice(1));
+        }
+      } catch (error) {
+        console.error('Error fetching quotes:', error);
+      }
+    };
+
+    if (quotes.length === 0) {
+      fetchQuotes();
+      console.log('fetching quotes'); 
+    }
+  }, [quotes]); 
+
+  return (
+    <div className="Main">
+      <h1>Quote Script</h1>
+      <p>Endless inspiration, Discover your Quote of the Day!</p>
+      <Hrquote type="start"/>
+      <Quote quote={currentQuote} />
+      <Hrquote type="end"/>
+      <Ctabuttons selectNewQuote={selectNewQuote}/>
+    </div>
+  );
 }
   
