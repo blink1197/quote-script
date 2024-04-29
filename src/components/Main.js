@@ -15,14 +15,14 @@ function Quote(props) {
   let content = '';
   if (props.quote.content) {
     content = (
-      <div>
+      <div id ='quote-content'>
         <p>{props.quote.content}</p>
         <p>- {props.quote.author}</p>
       </div>
     );
   } else {
     content = (
-      <div>
+      <div id ='quote-content'>
         <p>Click the button below to generate a random quote.</p>
       </div>
     );
@@ -38,14 +38,21 @@ function Ctabuttons(props) {
   return (
       <div className='Ctabuttons'>
           <button onClick={props.selectNewQuote}>New Quote</button>
-          <button>Copy Quote</button>
+          <button onClick={props.copyCurrentQuote}>Copy Quote</button>
       </div>
   );
 }
 
 function RecentQuotes(props) {
+  let quotes = [];
 
-  const recentQuotesList = props.recentQuotes.map(quote => {
+  if (props.recentQuotes.length > 5) {
+    quotes = props.recentQuotes.slice(-5);
+  } else {
+    quotes = props.recentQuotes;
+  }
+
+  const recentQuotesList = quotes.map(quote => {
     if (quote._id) return <p key={quote._id}>{quote.content} - <em>{quote.author}</em></p>
   });
 
@@ -73,6 +80,27 @@ export default function Main() {
     setRecentQuotes(prevQuotes => [...prevQuotes, currentQuote]);
   }
 
+  const copyCurrentQuote = () => {
+    if (!navigator.clipboard) {
+      console.log('Clipboard API not available');
+      return;
+    }
+    navigator.clipboard.writeText(`${currentQuote.content} - ${currentQuote.author}`)
+      .then(() => {
+        alert('Quote copied to clipboard successfully!');
+      })
+      .catch(err => {
+        console.error('Failed to copy text: ', err);
+      });
+  }
+
+  useEffect(() => {
+    const contentDiv = document.getElementById('quote-content');
+    contentDiv.classList.remove('fade-in'); 
+    void contentDiv.offsetWidth; 
+    contentDiv.classList.add('fade-in'); 
+  }, [currentQuote]); 
+
   useEffect(() => {
     const fetchQuotes = async () => {
       const apiUrl = 'https://api.quotable.io/quotes/random?limit=50';
@@ -90,13 +118,8 @@ export default function Main() {
 
     if (quotes.length === 0) {
       fetchQuotes();
-      console.log('fetching quotes'); 
     }
   }, [quotes]); 
-
-  console.log('current:', currentQuote);
-  console.log('remaining:', quotes);
-  console.log('recent:', recentQuotes);
 
   return (
     <div className="Main">
@@ -105,8 +128,8 @@ export default function Main() {
       <Hrquote type="start"/>
       <Quote quote={currentQuote} />
       <Hrquote type="end"/>
-      <Ctabuttons selectNewQuote={selectNewQuote}/>
-      <Socials />
+      <Ctabuttons selectNewQuote={selectNewQuote} copyCurrentQuote={copyCurrentQuote}/>
+      <Socials quote={currentQuote}/>
       <RecentQuotes recentQuotes={recentQuotes}/>
     </div>
   );
