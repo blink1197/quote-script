@@ -15,14 +15,14 @@ function Quote(props) {
   let content = '';
   if (props.quote.content) {
     content = (
-      <div>
+      <div id ='quote-content'>
         <p>{props.quote.content}</p>
         <p>- {props.quote.author}</p>
       </div>
     );
   } else {
     content = (
-      <div>
+      <div id ='quote-content'>
         <p>Click the button below to generate a random quote.</p>
       </div>
     );
@@ -94,6 +94,12 @@ export default function Main() {
       });
   }
 
+  useEffect(() => {
+    const contentDiv = document.getElementById('quote-content');
+    contentDiv.classList.remove('fade-in'); 
+    void contentDiv.offsetWidth; 
+    contentDiv.classList.add('fade-in'); 
+  }, [currentQuote]); 
 
   useEffect(() => {
     const fetchQuotes = async () => {
@@ -115,7 +121,6 @@ export default function Main() {
     }
   }, [quotes]); 
 
-
   return (
     <div className="Main">
       <h1>Quote Script</h1>
@@ -124,7 +129,7 @@ export default function Main() {
       <Quote quote={currentQuote} />
       <Hrquote type="end"/>
       <Ctabuttons selectNewQuote={selectNewQuote} copyCurrentQuote={copyCurrentQuote}/>
-      <Socials />
+      <Socials quote={currentQuote}/>
       <RecentQuotes recentQuotes={recentQuotes}/>
     </div>
   );
