@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import Socials from './Socials';
 import '../App.css';
 
 function Hrquote(props) {
@@ -10,12 +11,26 @@ function Hrquote(props) {
     );
 }
 
-function Quote(props) {
-  return (
-      <div className='Quote'>
-          <p>{props.quote.content}</p>
-          <p>{props.quote.author}</p>
+function Quote(props) { 
+  let content = '';
+  if (props.quote.content) {
+    content = (
+      <div>
+        <p>{props.quote.content}</p>
+        <p>- {props.quote.author}</p>
       </div>
+    );
+  } else {
+    content = (
+      <div>
+        <p>Click the button below to generate a random quote.</p>
+      </div>
+    );
+  }
+  return (
+    <div className='Quote'>
+      {content}
+    </div>
   );
 }
 
@@ -28,11 +43,26 @@ function Ctabuttons(props) {
   );
 }
 
+function RecentQuotes(props) {
+
+  const recentQuotesList = props.recentQuotes.map(quote => {
+    if (quote._id) return <p key={quote._id}>{quote.content} - <em>{quote.author}</em></p>
+  });
+
+  return (
+    <div className="RecentQuotes">
+      <h2>Recent:</h2>
+      {recentQuotesList}
+    </div>
+  );
+
+}
+
 
 export default function Main() {
   const [currentQuote, setCurrentQuote] = useState({});
   const [quotes, setQuotes] = useState([]);
-  const [recent, setRecentQuotes] = useState([]);
+  const [recentQuotes, setRecentQuotes] = useState([]);
 
   const selectNewQuote = () => {
     if (quotes.length === 0) return; // If quotes array is empty, do nothing
@@ -40,7 +70,7 @@ export default function Main() {
     const newQuote = quotes[randomIndex];
     setCurrentQuote(newQuote);
     setQuotes(prevQuotes => prevQuotes.filter((item, index) => index !== randomIndex));
-    setRecentQuotes(prevQuotes => [...prevQuotes, newQuote]);
+    setRecentQuotes(prevQuotes => [...prevQuotes, currentQuote]);
   }
 
   useEffect(() => {
@@ -64,6 +94,10 @@ export default function Main() {
     }
   }, [quotes]); 
 
+  console.log('current:', currentQuote);
+  console.log('remaining:', quotes);
+  console.log('recent:', recentQuotes);
+
   return (
     <div className="Main">
       <h1>Quote Script</h1>
@@ -72,6 +106,8 @@ export default function Main() {
       <Quote quote={currentQuote} />
       <Hrquote type="end"/>
       <Ctabuttons selectNewQuote={selectNewQuote}/>
+      <Socials />
+      <RecentQuotes recentQuotes={recentQuotes}/>
     </div>
   );
 }
