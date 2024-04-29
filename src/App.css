@@ -66,9 +66,21 @@
 
 
 .Quote {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 70%;
   text-align: center;
   margin: 0 auto;
+  min-height: 150px;
+}
+
+.Quote div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
 }
 
 .Quote p:last-of-type {
@@ -121,6 +133,7 @@
   padding-top: 20px;
   width: 80%;
   margin: 0 auto;
+  max-height: 500px;
 }
 
 .RecentQuotes h2 {
